@@ -1,10 +1,8 @@
-from pathlib import Path
 import aiohttp
 import asyncio
 import uvicorn
 from fastai import *
 from fastai.vision import *
-from fastai.vision.all import *
 from io import BytesIO
 from starlette.applications import Starlette
 from starlette.middleware.cors import CORSMiddleware
@@ -61,11 +59,11 @@ async def homepage(request):
 async def analyze(request):
     img_data = await request.form()
     img_bytes = await (img_data['file'].read())
-    img = load_image(BytesIO(img_bytes))
+    img = open_image(BytesIO(img_bytes))
     prediction = learn.predict(img)[0]
     return JSONResponse({'result': str(prediction)})
 
 
 if __name__ == '__main__':
     if 'serve' in sys.argv:
-        uvicorn.run(app=app, host='0.0.0.0', port=45201, log_level="info")
+        uvicorn.run(app=app, host='0.0.0.0', port=5000, log_level="info")
